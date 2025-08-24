@@ -1,21 +1,17 @@
 const http = require('http');
 const mysql = require('mysql2');
 const url = require('url');
-
-// Create DB connection
 const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
   password: '',
-  database: 'Birds' // change this to your actual database name
+  database: 'Birds' 
 });
-
 db.connect(err => {
   if (err) throw err;
   console.log('Connected to MySQL database');
 });
 
-// Create server
 const server = http.createServer((req, res) => {
   res.setHeader('Content-Type', 'application/json');
 
@@ -23,8 +19,6 @@ const server = http.createServer((req, res) => {
   const path = parsedUrl.pathname;
   const query = parsedUrl.query;
   const method = req.method;
-
-  // Get all birds or a single bird by id
   if (path === '/birds' && method === 'GET') {
     if (query.bird_id) {
       db.query('SELECT * FROM birds WHERE bird_id = ?', [query.bird_id], (err, result) => {
@@ -39,7 +33,6 @@ const server = http.createServer((req, res) => {
     }
   }
 
-  // Insert new bird
   else if (path === '/birds' && method === 'POST') {
     let body = '';
     req.on('data', chunk => body += chunk);
@@ -55,8 +48,6 @@ const server = http.createServer((req, res) => {
       );
     });
   }
-
-  // Update bird
   else if (path === '/birds' && method === 'PUT') {
     let body = '';
     req.on('data', chunk => body += chunk);
@@ -73,7 +64,6 @@ const server = http.createServer((req, res) => {
     });
   }
 
-  // Delete bird
   else if (path === '/birds' && method === 'DELETE') {
     db.query('DELETE FROM birds WHERE bird_id=?', [query.bird_id], (err, result) => {
       if (err) throw err;
@@ -87,7 +77,6 @@ const server = http.createServer((req, res) => {
   }
 });
 
-// Start server
 const port = 3000;
 server.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
