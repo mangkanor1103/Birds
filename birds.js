@@ -4,7 +4,7 @@ const url = require('url');
 const db = mysql.createConnection({
   host: '192.168.1.102',
   user: 'root',
-  password: '',
+  password: '12345678',
   database: 'Birds' 
 });
 db.connect(err => {
